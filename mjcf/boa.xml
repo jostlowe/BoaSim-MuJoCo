@@ -1,0 +1,93 @@
+<mujoco>
+  <default>
+    <default class="boa">
+      <geom type="capsule" friction="0.1" mass="0.4" size="0.08 0.10" rgba="1 0.66 0 1" zaxis="1 0 0" pos="0.1 0 0"/>
+      <joint damping="0.1"/>
+    </default>
+    <position kp="10" forcerange="-1 1" forcelimited="true"/>
+  </default>
+
+  <worldbody>
+
+    <body childclass="boa" name="boa">
+      <geom/>
+      <joint type="free"/>
+
+      <body pos="0.2 0 0">
+        <geom/>
+        <joint name="joint_1"/>
+
+        <body pos="0.2 0 0">
+          <geom/>
+          <joint name="joint_2"/>
+
+          <body pos="0.2 0 0">
+            <geom/>
+            <joint name="joint_3"/>
+
+            <body pos="0.2 0 0">
+              <geom/>
+              <joint name="joint_4"/>
+
+              <body pos="0.2 0 0">
+                <geom/>
+                <joint name="joint_5"/>
+
+                <body pos="0.2 0 0">
+                  <geom/>
+                  <joint name="joint_6"/>
+
+                  <body pos="0.2 0 0">
+                    <geom/>
+                    <joint name="joint_7"/>
+
+                    <body pos="0.2 0 0">
+                      <geom/>
+                      <joint name="joint_8"/>
+
+                      <body pos="0.2 0 0">
+                        <geom/>
+                        <joint name="joint_9"/>
+
+                        <body pos="0.2 0 0">
+                          <geom/>
+                          <joint name="joint_10"/>
+
+                          <body pos="0.2 0 0">
+                            <geom/>
+                            <joint name="joint_11"/>
+
+                            <body pos="0.2 0 0">
+                              <geom/>
+                              <joint name="joint_12"/>
+
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position joint="joint_1"/>
+    <position joint="joint_2"/>
+    <position joint="joint_3"/>
+    <position joint="joint_4"/>
+    <position joint="joint_5"/>
+    <position joint="joint_6"/>
+    <position joint="joint_7"/>
+    <position joint="joint_8"/>
+    <position joint="joint_9"/>
+    <position joint="joint_10"/>
+    <position joint="joint_11"/>
+    <position joint="joint_12"/>
+  </actuator>
+</mujoco>
