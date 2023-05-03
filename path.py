@@ -16,9 +16,7 @@ def round_linestring(linestring: LineString, radius: float) -> LineString:
 
 def three_point_angle(a, b, c):
     ab, bc = b-a, c-b
-    theta_1 = np.arctan2(ab[0], ab[1])
-    theta_2 = np.arctan2(bc[0], bc[1])
-    return theta_1-theta_2
+    return np.arctan2(ab[0]*bc[1]-bc[0]*ab[1], ab[0]*bc[0]+ab[1]*bc[1])
 
 
 class SnakePath:
@@ -59,7 +57,7 @@ class SnakePath:
 
 
 path = SnakePath(
-    control_points=[(0, 0), (2.6, 0), (2.6, 0.34), (1.85, 0.34), (1.85, 0.66), (3, 0.66), (3.4, 0), (5, 0)],
+    control_points=[(0, 0), (2.6, 0), (2.6, 0.8), (3.3, 0.5), (3.0, 0), (3.4, -0.2), (4, 0), (4.4, 0), (4.7, -0.4), (6, 0)],
     min_radius=0.15,
     n_links=15,
     link_length=0.2
@@ -69,9 +67,9 @@ path = SnakePath(
 plt.plot(*path.control_points.xy, '--D')
 plt.plot(*path.path.xy)
 
-print(path.get_vertices(0))
-print(path.get_joint_angles(0))
-a = LineString(path.get_vertices(0))
+print(path.get_vertices(1.5))
+print(path.get_joint_angles(1.5))
+a = LineString(path.get_vertices(1.5))
 border = a.buffer(WIDTH)
 
 plt.plot(*a.xy, "o")
@@ -83,9 +81,14 @@ obstacles = [
     (1.4, -0.17),
     (2.4, 0.17),
     (2.1, -0.17),
-    (2.05, 0.5),
-    (2.4, 0.82),
-    (2.9, 0.5)
+    (2.9, 0.5),
+    (3.3, 0.2),
+    (3.2, -0.25),
+    (3.7, -0.25),
+    (3.7, 0.1),
+    (4.2, -0.16),
+    (4.7, -0.16),
+    (5.4, -0.35),
 ]
 
 for obstacle in obstacles:
@@ -93,5 +96,6 @@ for obstacle in obstacles:
     plt.plot(*geom, 'k')
 
 plt.gca().set_aspect("equal")
+plt.grid()
 plt.show()
 

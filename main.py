@@ -20,8 +20,9 @@ def get_joint_angles(data: mujoco.MjData):
 
 def calculate_target_joint_angles(data: mujoco.MjData):
     path = SnakePath(
-        control_points=[(0, 0), (2.6, 0), (2.6, 0.34), (1.85, 0.34), (1.85, 0.66), (3, 0.66), (3.4, 0), (5, 0)],
-        min_radius=0.15,
+        control_points=[(0, 0), (2.6, 0), (2.6, 0.8), (3.3, 0.5), (3.0, 0), (3.4, -0.2), (4, 0), (4.4, 0), (4.7, -0.4),
+                        (6, 0)],
+        min_radius=0.2,
         n_links=N_LINKS,
         link_length=0.2
     )
@@ -30,7 +31,7 @@ def calculate_target_joint_angles(data: mujoco.MjData):
 
 
 def controller(_model: mujoco.MjModel, data: mujoco.MjData):
-    MAX_SPEED = 2
+    MAX_SPEED = 4
     GAIN = 4
 
     # Control

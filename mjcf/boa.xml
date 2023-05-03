@@ -1,8 +1,8 @@
 <mujoco>
   <default>
     <default class="boa">
-      <geom type="capsule" friction="0.1" mass="0.4" size="0.08 0.10" rgba="1 0.66 0 1" zaxis="1 0 0" pos="0.1 0 0"/>
-      <joint damping="0.5"/>
+      <geom type="capsule" friction="0.05" mass="0.4" size="0.08 0.10" rgba="1 0.66 0 1" zaxis="1 0 0" pos="0.1 0 0"/>
+      <joint damping="0.4"/>
     </default>
     <intvelocity kp="50" forcerange="-3 3" forcelimited="true" actrange="-1.57 1.57"/>
   </default>
