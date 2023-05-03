@@ -1,17 +1,17 @@
 import csv
 import math
-import threading
 import time
-from copy import deepcopy
 
 import mujoco
 from mujoco import viewer
-from itertools import pairwise
 import numpy as np
-from matplotlib import pyplot as plt
 
-N_LINKS = 13
+from path import SnakePath
+
+
+N_LINKS = 15
 N_JOINTS = N_LINKS - 1
+SPEED = 0.1
 
 def get_joint_angles(data: mujoco.MjData):
     joint_names = [f"joint_{i}" for i in range(1, N_LINKS)]
@@ -19,17 +19,18 @@ def get_joint_angles(data: mujoco.MjData):
 
 
 def calculate_target_joint_angles(data: mujoco.MjData):
-    SPEED = 0.5   # Link lengths per second
-
-    path = [0.0] * N_JOINTS + [math.pi / 3] * 3 + [0] * 2 + [-math.pi / 3] * 3 + [0]*2 + [-math.pi/4] + [0] + [math.pi/3]*3 + [0] * N_JOINTS
-    progress = data.time * SPEED
-    step = math.floor(progress)
-    target_angles = np.array(path[step:(step + N_JOINTS)])
+    path = SnakePath(
+        control_points=[(0, 0), (2.6, 0), (2.6, 0.34), (1.85, 0.34), (1.85, 0.66), (3, 0.66), (3.4, 0), (5, 0)],
+        min_radius=0.15,
+        n_links=N_LINKS,
+        link_length=0.2
+    )
+    target_angles = np.array(path.get_joint_angles(data.time*SPEED))
     return target_angles
 
 
 def controller(_model: mujoco.MjModel, data: mujoco.MjData):
-    MAX_SPEED = 0.5
+    MAX_SPEED = 2
     GAIN = 4
 
     # Control

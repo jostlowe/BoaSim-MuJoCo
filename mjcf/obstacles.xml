@@ -8,15 +8,15 @@
   <worldbody>
     <body childclass="obstacle">
       <!-- Initial obstacles -->
-      <geom pos="1.2 0.17 0.05"/>
-      <geom pos="1 -0.17 0.05"/>
-      <geom pos="2 0.17 0.05"/>
-      <geom pos="1.7 -0.17 0.05"/>
+      <geom pos="1.6 0.17 0.05"/>
+      <geom pos="1.4 -0.17 0.05"/>
+      <geom pos="2.4 0.17 0.05"/>
+      <geom pos="2.1 -0.17 0.05"/>
 
       <!-- More obstacles -->
-      <geom pos="1.65 0.5 0.05"/>
-      <geom pos="2 0.82 0.05"/>
-      <geom pos="2.5 0.5 0.05"/>
+      <geom pos="2.05 0.5 0.05"/>
+      <geom pos="2.4 0.82 0.05"/>
+      <geom pos="2.9 0.5 0.05"/>
     </body>
   </worldbody>
 

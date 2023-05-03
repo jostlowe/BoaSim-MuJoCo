@@ -28,8 +28,8 @@ class SnakePath:
     link_length: float
 
     def __init__(self, control_points, min_radius, n_links, link_length):
-        self.control_points = control_points
-        self.path = round_linestring(control_points, min_radius)
+        self.control_points = LineString(control_points)
+        self.path = round_linestring(self.control_points, min_radius)
         self.n_links = n_links
         self.link_length = link_length
 
@@ -59,9 +59,9 @@ class SnakePath:
 
 
 path = SnakePath(
-    control_points=LineString([(0, 0), (2.2, 0), (2.2, 0.34), (1.45, 0.34), (1.45, 0.66), (3.0, 0.66)]),
+    control_points=[(0, 0), (2.6, 0), (2.6, 0.34), (1.85, 0.34), (1.85, 0.66), (3, 0.66), (3.4, 0), (5, 0)],
     min_radius=0.15,
-    n_links=13,
+    n_links=15,
     link_length=0.2
 )
 
@@ -69,9 +69,9 @@ path = SnakePath(
 plt.plot(*path.control_points.xy, '--D')
 plt.plot(*path.path.xy)
 
-print(path.get_vertices(1.0))
-print(path.get_joint_angles(1))
-a = LineString(path.get_vertices(1))
+print(path.get_vertices(0))
+print(path.get_joint_angles(0))
+a = LineString(path.get_vertices(0))
 border = a.buffer(WIDTH)
 
 plt.plot(*a.xy, "o")
@@ -79,13 +79,13 @@ plt.plot(*border.boundary.xy)
 plt.plot(*path.path.buffer(WIDTH).boundary.xy)
 
 obstacles = [
-    (1.2, 0.17),
-    (1, -0.17),
-    (2, 0.17),
-    (1.7, -0.17),
-    (1.65, 0.5),
-    (2, 0.82),
-    (2.5, 0.5)
+    (1.6, 0.17),
+    (1.4, -0.17),
+    (2.4, 0.17),
+    (2.1, -0.17),
+    (2.05, 0.5),
+    (2.4, 0.82),
+    (2.9, 0.5)
 ]
 
 for obstacle in obstacles:
