@@ -13,8 +13,6 @@ from matplotlib import pyplot as plt
 N_LINKS = 13
 N_JOINTS = N_LINKS - 1
 
-
-
 def get_joint_angles(data: mujoco.MjData):
     joint_names = [f"joint_{i}" for i in range(1, N_LINKS)]
     return np.array([data.joint(joint_name).qpos[0] for joint_name in joint_names])
