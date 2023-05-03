@@ -1,51 +1,66 @@
+import math
 from dataclasses import dataclass
-import shapely
+from shapely import LineString, Point, MultiPoint, distance
 import matplotlib.pyplot as plt
 import numpy as np
 
-@dataclass
-class LineArcPath:
-    control_points: [(float, float)]
-
-path = LineArcPath([
-    (0,0),
-    (1,0),
-    (2,1),
-    (3,1)
-])
-
-def round(linestring, radius):
-    return linestring.offset_curve(radius).offset_curve(-2*radius).offset_curve(radius)
-
-seg = shapely.LineString([(0,0), (1,0), (1,1), (2,0)])
-plt.plot(*seg.xy)
-rounded = round(seg, 0.2)
-plt.plot(*rounded.xy)
-
-start_point = rounded.interpolate(0)
-points = [start_point]
-
-for n in range(13):
-    rad = points[-1].buffer(0.2).boundary
-    intersects = rounded.intersection(rad)
-
-    if isinstance(intersects, shapely.Point):
-        points.append(intersects)
-
-    if isinstance(intersects, shapely.MultiPoint):
-        current = points[-1]
-        prev = points[-2]
-        next_point = next(filter(lambda i: not i.equals_exact(prev, tolerance=0.01), intersects.geoms))
-        points.append(next_point)
+MIN_RADIUS = 0.2
+LINK_LENGTH = 0.2
+WIDTH = 0.08
+L_0 = 0.1
 
 
-print(points)
+def round_linestring(linestring: LineString, radius: float) -> LineString:
+    return linestring.offset_curve(radius).offset_curve(-2 * radius).offset_curve(radius)
 
-a = np.array([(p.x, p.y) for p in points])
-print(a)
-plt.plot(a[:, 0], a[:, 1], "-o")
-plt.gca().set_aspect('equal')
+
+def calculate_joint_positions(path: LineString, n_links: int, link_length: float, offset: float) -> LineString:
+    points = [path.interpolate(offset)]
+    for n in range(n_links):
+        # Find all points on path that are exactly one link length from the current joint
+        intersects = path.intersection(points[-1].buffer(link_length).boundary)
+
+        match intersects:
+            case Point():
+                points.append(intersects)
+
+            case MultiPoint():
+                # Approximate the position of the approximated point
+                approx = path.interpolate(offset + (n + 1) * link_length)
+
+                # Pick the intersection that is the closest to the approximated point
+                next_point = min(intersects.geoms, key=lambda point: distance(approx, point))
+                points.append(next_point)
+
+    return LineString(points)
+
+
+class SnakePath():
+    path: LineString
+    n_joints: int
+    link_length: float
+
+    def __init__(self, control_points, min_radius, n_joints, link_length):
+        self.path = round_linestring(control_points, min_radius)
+        self.n_joints = n_joints
+        self.link_length = link_length
+
+    def get_joint_angles(self, offset: float):
+        return calculate_joint_positions(self.path, self.n_joints, self.link_length, offset)
+
+
+control_points = LineString([(0, 0), (1, -0.2), (1, 1), (2, 0)])
+path = round_linestring(control_points, 0.2)
+joint_positions = calculate_joint_positions(path, 13, 0.2, 0)
+
+plt.plot(*control_points.xy, '--D')
+plt.plot(*path.xy)
+
+print(joint_positions)
+a = LineString(joint_positions)
+border = a.buffer(WIDTH)
+
+plt.plot(*a.xy, "o")
+plt.plot(*border.boundary.xy)
+plt.gca().set_aspect("equal")
 plt.show()
-
-a = shapely.LineString(path.control_points)
-
